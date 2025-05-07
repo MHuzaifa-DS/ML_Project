@@ -1,2 +1,2 @@
-# ML_Project
-In my 6th Semester we develop a project by using pythpn ,Flask and OpenAI
+ Project Overview
+The Superior Admission Chatbot (SAC) is a smart, AI-powered chatbot designed to assist prospective students by providing instant, accurate, and updated information about Superior University’s admissions, programs, scholarships, deadlines, and campus life. The chatbot will use cutting-edge technologies such as Flask, LangChain, LLMs, NLP, and optional web scraping to offer a seamless Q&A experience.
