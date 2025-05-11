@@ -1,0 +1,653 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎓 Superior Admission Chatbot</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      color: #0066cc;
+      margin-bottom: 10px;
+    }
+
+    .sidebar input[type="file"],
+    .sidebar button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+      color: #0066cc;
+    }
+
+    #chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #d0e7ff;
+      text-align: right;
+      margin-left: auto;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #eeeeee;
+      text-align: left;
+      margin-right: auto;
+    }
+
+    #chat-input {
+      display: flex;
+      padding: 15px;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+    }
+
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    #chat-input button {
+      padding: 10px 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #chat-input button:hover {
+      background-color: #004999;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>📁 Upload File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" required />
+      <button type="submit">Upload (Max 200MB)</button>
+    </form>
+    <div>
+      <h2>🗂 Recent</h2>
+      <ul id="recentList"></ul>
+    </div>
+  </div>
+
+  <div class="main">
+    <header>🎓 Superior Admission Chatbot</header>
+    <div id="chat-box"></div>
+    <div id="chat-input">
+      <input type="text" id="question" placeholder="Ask about admissions..." />
+      <button onclick="sendQuestion()">Ask</button>
+    </div>
+  </div>
+
+  <script>
+    async function loadMessages() {
+      const res = await fetch("/messages");
+      const messages = await res.json();
+      messages.forEach(m => addMessage(m.sender, m.text));
+    }
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.textContent = text;
+      document.getElementById("chat-box").appendChild(div);
+      document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    }
+
+    async function sendQuestion() {
+      const input = document.getElementById("question");
+      const question = input.value.trim();
+      if (!question) return;
+
+      addMessage("user", question);
+      input.value = "";
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await res.json();
+      addMessage("bot", data.answer);
+    }
+
+    document.getElementById('uploadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: formData
+      });
+      alert(await res.text());
+    };
+
+    window.onload = loadMessages;
+  </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎓 Superior University Chatbot</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+    .sidebar {
+      width: 260px;
+      background-color: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar h2 {
+      color: #0066cc;
+      margin-bottom: 10px;
+    }
+    .sidebar input[type="file"],
+    .sidebar button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #ddd;
+      background-color: #fff;
+      color: #0066cc;
+    }
+    #chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      max-width: 70%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+    }
+    .user {
+      align-self: flex-end;
+      background-color: #d0e7ff;
+      text-align: right;
+    }
+    .bot {
+      align-self: flex-start;
+      background-color: #eee;
+      text-align: left;
+    }
+    #chat-input {
+      display: flex;
+      padding: 15px;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+    }
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    #chat-input button {
+      padding: 10px 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #chat-input button:hover {
+      background-color: #004999;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>📁 Upload File</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" required />
+      <button type="submit">Upload (Max 200MB)</button>
+    </form>
+  </div>
+
+  <div class="main">
+    <header>🎓 Superior Admission Chatbot</header>
+    <div id="chat-box"></div>
+    <div id="chat-input">
+      <input type="text" id="question" placeholder="Ask about admissions..." />
+      <button onclick="sendQuestion()">Ask</button>
+    </div>
+  </div>
+
+  <script>
+    async function loadMessages() {
+      const res = await fetch("/messages");
+      const messages = await res.json();
+      messages.forEach(m => addMessage(m.sender, m.text));
+    }
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.textContent = text;
+      document.getElementById("chat-box").appendChild(div);
+      document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    }
+
+    async function sendQuestion() {
+      const input = document.getElementById("question");
+      const question = input.value.trim();
+      if (!question) return;
+
+      addMessage("user", question);
+      input.value = "";
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await res.json();
+      addMessage("bot", data.answer);
+    }
+
+    document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: formData
+      });
+      alert(await res.text());
+    };
+
+    window.onload = loadMessages;
+  </script>
+</body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎓 Superior University Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    aside {
+      background: #003366;
+      color: white;
+      padding: 20px;
+      width: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    aside h1 {
+      font-size: 18px;
+      text-align: center;
+    }
+    aside input, aside button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f7f9fc;
+    }
+    header {
+      background: white;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #003366;
+      text-align: center;
+    }
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      max-width: 70%;
+    }
+    .user {
+      background: #cce5ff;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .bot {
+      background: #eaeaea;
+      align-self: flex-start;
+    }
+    #chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background: white;
+    }
+    #question {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>📄 Upload File</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" accept=".pdf,.txt" />
+      <button type="submit">Upload</button>
+    </form>
+  </aside>
+  <main>
+    <header>🎓 Superior University Chatbot</header>
+    <div id="chat-box"></div>
+    <div id="chat-input">
+      <input type="text" id="question" placeholder="Ask something about the document..." />
+      <button onclick="sendQuestion()">Ask</button>
+    </div>
+  </main>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerHTML = `<strong>${sender === 'bot' ? '🤖' : '🤵'}:</strong> ${text}`;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendQuestion() {
+      const input = document.getElementById("question");
+      const question = input.value.trim();
+      if (!question) return;
+      addMessage('user', question);
+      input.value = "";
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+      addMessage('bot', data.answer);
+    }
+
+    document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      if (!fileInput.files.length) {
+        alert("Please select a file");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: formData
+      });
+      alert(await res.text());
+    };
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎓 Superior University Chatbot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background: #f4f7fa;
+    }
+    aside {
+      background: #003366;
+      color: white;
+      width: 250px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    aside h2 {
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    aside input, aside button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: white;
+      color: #003366;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+    #chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #e9eff5;
+    }
+    .message {
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+    .user {
+      background: #cce5ff;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .bot {
+      background: #e0e0e0;
+      align-self: flex-start;
+    }
+    #chat-input {
+      display: flex;
+      padding: 10px;
+      background: white;
+      border-top: 1px solid #ccc;
+    }
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    #chat-input button {
+      margin-left: 10px;
+      padding: 10px 16px;
+      background: #003366;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h2>📁 Upload PDF</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" accept=".pdf" required />
+      <button type="submit">Upload (Max 200MB)</button>
+    </form>
+  </aside>
+
+  <main>
+    <header>🎓 Superior Admission Chatbot</header>
+    <div id="chat-box"></div>
+    <div id="chat-input">
+      <input type="text" id="question" placeholder="Ask about admissions..." />
+      <button onclick="sendQuestion()">Ask</button>
+    </div>
+  </main>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+
+    function addMessage(sender, text) {
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerHTML = `<strong>${sender === 'bot' ? '🤖' : '🤵'}:</strong> ${text}`;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendQuestion() {
+      const input = document.getElementById("question");
+      const question = input.value.trim();
+      if (!question) return;
+      addMessage('user', question);
+      input.value = "";
+
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+      addMessage('bot', data.answer);
+    }
+
+    document.getElementById("uploadForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      if (!fileInput.files.length) return alert("Please select a file");
+
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      const res = await fetch("/upload", {
+        method: "POST",
+        body: formData
+      });
+      alert(await res.text());
+    };
+
+    window.onload = async () => {
+      const res = await fetch("/messages");
+      const messages = await res.json();
+      messages.forEach(msg => addMessage(msg.sender, msg.text));
+    };
+  </script>
+</body>
+</html>
